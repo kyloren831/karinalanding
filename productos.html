@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Premium</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #B8941F;
+            --black: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--black);
+            color: var(--gold);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, var(--black) 70%);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(212, 175, 55, 0.03) 2px,
+                rgba(212, 175, 55, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 300;
+            letter-spacing: 20px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--gold), var(--dark-gold), var(--gold));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-line {
+            width: 200px;
+            height: 1px;
+            background: var(--gold);
+            margin: 2rem auto;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-20px); }
+        }
+
+        .catalog-section {
+            padding: 100px 50px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 10px;
+            margin-bottom: 80px;
+            text-transform: uppercase;
+        }
+
+        .products-showcase {
+            display: grid;
+            gap: 0;
+        }
+
+        .product-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+            border-bottom: 1px solid var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-item:nth-child(even) {
+            direction: rtl;
+        }
+
+        .product-item:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .product-visual {
+            background: linear-gradient(135deg, var(--black) 0%, rgba(212, 175, 55, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            position: relative;
+            transition: all 0.6s ease;
+        }
+
+        .product-item:hover .product-visual {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, var(--black) 100%);
+        }
+
+        .product-visual::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s ease;
+            opacity: 0.3;
+        }
+
+        .product-item:hover .product-visual::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .product-details {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--black);
+            position: relative;
+        }
+
+        .product-number {
+            font-size: 1rem;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .product-desc {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            max-width: 500px;
+        }
+
+        .product-price-tag {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+
+        .product-cta {
+            display: inline-block;
+            padding: 15px 50px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            width: fit-content;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .product-cta:hover::before {
+            left: 0;
+        }
+
+        .product-cta:hover {
+            color: var(--black);
+        }
+
+        .decorative-line {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            border-top: 1px solid var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 968px) {
+            h1 { font-size: 3rem; letter-spacing: 10px; }
+            .product-item {
+                grid-template-columns: 1fr;
+            }
+            .product-item:nth-child(even) {
+                direction: ltr;
+            }
+            .product-details {
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Mentor Bussines</h1>
+            <div class="hero-line"></div>
+            <p style="letter-spacing: 8px; font-size: 1.2rem;">COLECCIÓN PREMIUM</p>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <section class="catalog-section">
+        <h2 class="section-title">Catálogo</h2>
+
+        <div class="products-showcase">
+            <div class="product-item">
+                <div class="product-visual"><img src="images/planner.png" width="200" height="200"/> </div>
+                <div class="product-details">
+                    <div class="product-number">01</div>
+                    <h3 class="product-title">Planner de Emprendimiento</h3>
+                    <p class="product-desc">Es una herramienta que busca ayudar a los emprendedores  fijar metas, organizarse y escribir ideas, cuenta con una sección para metas mensuales y semanales, tiene un espacio para apuntar gatos, y otro para crear hábitos en cada mes.</p>
+                    <div class="product-price-tag">₡7,500</div>
+                    <button class="product-cta">Explorar</button>
+                    <div class="decorative-line"></div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-visual"><img src="images/ebooks.png" width="200" height="200"/></div>
+                <div class="product-details">
+                    <div class="product-number">02</div>
+                    <h3 class="product-title">E-books y Guias Digitales</h3>
+                    <p class="product-desc">E-books y guias descargables sobre temas específicos como "Guía para validar tu idea de negocio"</p>
+                    <div class="product-price-tag">₡10,000 - ₡5,000</div>
+                    <button class="product-cta">Explorar</button>
+                    <div class="decorative-line"></div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-visual"><img src="images/auditoria.png" width="200" height="200"/></div>
+                <div class="product-details">
+                    <div class="product-number">03</div>
+                    <h3 class="product-title">Auditorias</h3>
+                    <p class="product-desc">Un mentor revisa tu plan de negocio y recibes feedback escrito o en video</p>
+                    <div class="product-price-tag">₡10,000 - ₡15,000</div>
+                    <button class="product-cta">Explorar</button>
+                    <div class="decorative-line"></div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-visual"><img src="images/tools.png" width="200" height="200"/></div>
+                <div class="product-details">
+                    <div class="product-number">04</div>
+                    <h3 class="product-title">Herramientas Digitales</h3>
+                    <p class="product-desc">Acceso a herramientas como "Simulador de flujo de caja"</p>
+                    <div class="product-price-tag">₡10,000</div>
+                    <button class="product-cta">Explorar</button>
+                    <div class="decorative-line"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 MENTOR BUSSINES COLLECTION — EXCELENCIA EN CADA DETALLE</p>
+    </footer>
+
+    <script>
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('.catalog-section').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('.product-cta').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
